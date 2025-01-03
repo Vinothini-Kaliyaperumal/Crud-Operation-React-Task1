@@ -1,0 +1,120 @@
+/* Form Container */
+.form-container {
+    max-width: 700px; /* Reduced width */
+    margin: 0 auto;
+    padding: 15px; /* Reduced padding */
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(226, 167, 202, 0.1);
+    font-family: 'Times New Roman', Times, serif;
+    margin-top: 50px;
+  }
+  
+  /* Heading */
+  .form-heading {
+    text-align: center;
+    font-size: 1.8rem; /* Reduced font size */
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+  
+  /* Input and Dropdown Rows */
+  .input-row,
+  .dropdown-row {
+    display: flex;
+    gap: 15px; /* Reduced gap between fields */
+    margin-bottom: 12px; /* Reduced margin */
+  }
+  
+  /* Input Group */
+  .input-group {
+    flex: 1;
+  }
+  
+  .input-label {
+    font-size: 13px; /* Reduced label font size */
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 8px; /* Reduced padding */
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 13px; /* Reduced font size */
+  }
+  
+  .input-field:focus {
+    outline: none;
+    border-color: #007bff;
+    background-color: #fff;
+  }
+  
+  .error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  /* Dropdown Group */
+  .dropdown-group {
+    flex: 1;
+  }
+  
+  .select-input {
+    width: 100%;
+    padding: 8px; /* Reduced padding */
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #f7f7f7;
+    font-size: 13px; /* Reduced font size */
+  }
+  
+  .select-input:focus {
+    outline: none;
+    border-color: #007bff;
+    background-color: #fff;
+  }
+  
+  /* Button Group */
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px; /* Reduced margin */
+  }
+  
+  .submit-button {
+    padding: 8px 15px; /* Reduced button size */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px; /* Reduced font size */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 480px;
+  }
+  
+  .submit-button:hover {
+    background-color: #a1c5eb;
+  }
+  
+  .reset-button {
+    padding: 8px 15px; /* Reduced button size */
+    background-color: #eb6363;
+    border: 1px solid #ccc;
+    color:white;
+    font-size: 14px; /* Reduced font size */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 8px;
+    margin-right: 45px;
+  }
+  
+  .reset-button:hover {
+    background-color: #eea0ab;
+  }
+  

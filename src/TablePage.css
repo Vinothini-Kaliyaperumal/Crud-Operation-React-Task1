@@ -1,0 +1,115 @@
+/* Table Container */
+.table-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+    font-family: 'Times New Roman', Times, serif;
+  }
+  
+  /* Table Header */
+  .table-header {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #343a40;
+    font-weight: bold;
+  }
+  
+  /* Search Input */
+  .search-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .search-input {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Action Buttons */
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  .action-btn {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+  }
+  
+  .view-btn {
+    padding: 5px 15px;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  
+  .view-btn:hover {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    transform: scale(1.05);
+  }
+  
+  /* Table Styling */
+  .table {
+    margin-top: 10px;
+    border-collapse: collapse;
+  }
+  
+  .table th,
+  .table td {
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .table-hover tbody tr:hover {
+    background: #f0f0f5;
+  }
+  
+  /* Modal Styling */
+  .modal-content {
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #ffffff, #f3f4f6);
+    padding: 20px;
+  }
+  
+  .modal-header {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: #fff;
+    padding: 15px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .modal-body {
+    padding: 20px 0;
+  }
+  
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+  }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+  }
+  
