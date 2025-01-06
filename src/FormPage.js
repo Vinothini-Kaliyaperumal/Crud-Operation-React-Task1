@@ -1,15 +1,35 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './FormPage.css';
 
 const FormPage = ({ data, setData, editData, setEditData }) => {
   const navigate = useNavigate();
 
-  const cities = ['Chennai', 'Mumbai', 'Bangalore', 'Delhi'];
-  const states = ['Tamil Nadu', 'Maharashtra', 'Karnataka', 'Delhi'];
-  const countries = ['India', 'USA', 'Canada', 'UK'];
+  const countries = {
+    India: {
+      states: ['Tamil Nadu', 'Maharashtra', 'Karnataka'],
+      cities: {
+        'Tamil Nadu': ['Chennai', 'Coimbatore'],
+        'Maharashtra': ['Mumbai', 'Pune'],
+        'Karnataka': ['Bangalore', 'Mysore'],
+      },
+    },
+    USA: {
+      states: ['California', 'Texas', 'New York'],
+      cities: {
+        'California': ['Los Angeles', 'San Francisco'],
+        'Texas': ['Houston', 'Dallas'],
+        'New York': ['New York City', 'Buffalo'],
+      },
+    },
+  };
+
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
 
   const formik = useFormik({
     initialValues: {
@@ -25,28 +45,34 @@ const FormPage = ({ data, setData, editData, setEditData }) => {
       status: '',
     },
     validationSchema: Yup.object({
-      name: Yup.string().required('Required'),
-      shortName: Yup.string().required('Required'),
-      email: Yup.string().email('Invalid email').required('Required'),
-      dob: Yup.date().required('Required'),
-      address: Yup.string().required('Required'),
-      address2: Yup.string().required('Required'),
-      city: Yup.string().required('Required'),
-      state: Yup.string().required('Required'),
-      country: Yup.string().required('Required'),
-      status: Yup.string().required('Required'),
+      name: Yup.string().required('Name is required.'),
+      shortName: Yup.string().required('Short name is required.'),
+      email: Yup.string().email('Invalid email format').required('Email address is required.'),
+      dob: Yup.date().required('Date of birth is required.'),
+      address: Yup.string().required('Please provide an address.'),
+      address2: Yup.string().required('Please provide a second address.'),
+      city: Yup.string().required('Please select a city.'),
+      state: Yup.string().required('Please select a state.'),
+      country: Yup.string().required('Please select a country.'),
+      status: Yup.string().required('Please select a status.'),
     }),
     onSubmit: (values) => {
-      if (editData !== null) {
-        const updatedData = [...data];
-        updatedData[editData] = values;
-        setData(updatedData);
-        setEditData(null);
-      } else {
-        setData([...data, values]);
+      try {
+        if (editData !== null) {
+          const updatedData = [...data];
+          updatedData[editData] = values;
+          setData(updatedData);
+          setEditData(null);
+          toast.success('Updated successfully!');
+        } else {
+          setData([...data, values]);
+          toast.success('Submitted successfully!');
+        }
+        formik.resetForm();
+        navigate('/table');
+      } catch (error) {
+        toast.error('Submission failed! Please try again.');
       }
-      formik.resetForm();
-      navigate('/table');
     },
   });
 
@@ -56,11 +82,23 @@ const FormPage = ({ data, setData, editData, setEditData }) => {
     }
   }, [editData]);
 
+  const handleCountryChange = (e) => {
+    const selectedCountry = e.target.value;
+    formik.setFieldValue('country', selectedCountry);
+    setStates(countries[selectedCountry]?.states || []);
+    setCities([]);
+  };
+
+  const handleStateChange = (e) => {
+    const selectedState = e.target.value;
+    formik.setFieldValue('state', selectedState);
+    setCities(countries[formik.values.country]?.cities[selectedState] || []);
+  };
+
   return (
     <div className="form-container">
       <h1 className="form-heading">Form Page</h1>
       <form onSubmit={formik.handleSubmit}>
-        {/* Name, ShortName, Email, DOB, etc. */}
         <div className="input-row">
           {['name', 'shortName'].map((field) => (
             <div key={field} className="input-group">
@@ -72,6 +110,7 @@ const FormPage = ({ data, setData, editData, setEditData }) => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="input-field"
+                placeholder={`Enter ${field === 'name' ? 'full name' : 'short name'}`}
               />
               {formik.touched[field] && formik.errors[field] && (
                 <div className="error">{formik.errors[field]}</div>
@@ -91,6 +130,7 @@ const FormPage = ({ data, setData, editData, setEditData }) => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="input-field"
+                placeholder={`Enter ${field === 'email' ? 'email' : 'date of birth'}`}
               />
               {formik.touched[field] && formik.errors[field] && (
                 <div className="error">{formik.errors[field]}</div>
@@ -110,30 +150,8 @@ const FormPage = ({ data, setData, editData, setEditData }) => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="input-field"
+                placeholder={`Enter ${field === 'address' ? 'address' : 'address 2'}`}
               />
-              {formik.touched[field] && formik.errors[field] && (
-                <div className="error">{formik.errors[field]}</div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className="dropdown-row">
-          {['city', 'state'].map((field) => (
-            <div key={field} className="dropdown-group">
-              <label className="input-label">{field.toUpperCase()}</label>
-              <select
-                name={field}
-                value={formik.values[field]}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="select-input"
-              >
-                <option value="">Select {field.charAt(0).toUpperCase() + field.slice(1)}</option>
-                {(field === 'city' ? cities : states).map((option) => (
-                  <option key={option} value={option}>{option}</option>
-                ))}
-              </select>
               {formik.touched[field] && formik.errors[field] && (
                 <div className="error">{formik.errors[field]}</div>
               )}
@@ -147,17 +165,57 @@ const FormPage = ({ data, setData, editData, setEditData }) => {
             <select
               name="country"
               value={formik.values.country}
-              onChange={formik.handleChange}
+              onChange={handleCountryChange}
               onBlur={formik.handleBlur}
               className="select-input"
             >
               <option value="">Select Country</option>
-              {countries.map((country) => (
+              {Object.keys(countries).map((country) => (
                 <option key={country} value={country}>{country}</option>
               ))}
             </select>
             {formik.touched.country && formik.errors.country && (
               <div className="error">{formik.errors.country}</div>
+            )}
+          </div>
+
+          <div className="dropdown-group">
+            <label className="input-label">STATE</label>
+            <select
+              name="state"
+              value={formik.values.state}
+              onChange={handleStateChange}
+              onBlur={formik.handleBlur}
+              className="select-input"
+            >
+              <option value="">Select State</option>
+              {states.map((state) => (
+                <option key={state} value={state}>{state}</option>
+              ))}
+            </select>
+            {formik.touched.state && formik.errors.state && (
+              <div className="error">{formik.errors.state}</div>
+            )}
+          </div>
+        </div>
+
+        <div className="dropdown-row">
+          <div className="dropdown-group">
+            <label className="input-label">CITY</label>
+            <select
+              name="city"
+              value={formik.values.city}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="select-input"
+            >
+              <option value="">Select City</option>
+              {cities.map((city) => (
+                <option key={city} value={city}>{city}</option>
+              ))}
+            </select>
+            {formik.touched.city && formik.errors.city && (
+              <div className="error">{formik.errors.city}</div>
             )}
           </div>
 
@@ -192,6 +250,8 @@ const FormPage = ({ data, setData, editData, setEditData }) => {
           )}
         </div>
       </form>
+
+      <ToastContainer />
     </div>
   );
 };

@@ -1,11 +1,8 @@
-
-// App.js
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import FormPage from './FormPage';
 import TablePage from './TablePage';
-
-
+import './App.css';
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -22,9 +19,26 @@ const App = () => {
 
   return (
     <Router>
-      <nav>
-        <Link to="/">Form</Link> | <Link to="/table">Table</Link>
+      {/* Simple Navbar */}
+      <nav className="navbar">
+        <a href="/" className="brand">My App</a>
+        <div className="nav-links">
+          <NavLink
+            to="/"
+            className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+          >
+            Form
+          </NavLink>
+          <NavLink
+            to="/table"
+            className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+          >
+            Table
+          </NavLink>
+        </div>
       </nav>
+
+      {/* Routes for FormPage and TablePage */}
       <Routes>
         <Route
           path="/"
