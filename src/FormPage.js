@@ -1,3 +1,4 @@
+// FormPage.js
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -56,22 +57,27 @@ const FormPage = ({ data, setData, editData, setEditData }) => {
       country: Yup.string().required('Please select a country.'),
       status: Yup.string().required('Please select a status.'),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       try {
         if (editData !== null) {
           const updatedData = [...data];
           updatedData[editData] = values;
-          setData(updatedData);
-          setEditData(null);
-          toast.success('Updated successfully!');
+          setData(updatedData);  // Update the data array
+          setEditData(null);  // Reset edit mode
+          toast.success('Updated successfully!');  // Success message
         } else {
-          setData([...data, values]);
-          toast.success('Submitted successfully!');
+          setData([...data, values]);  // Add new entry to data
+          toast.success('Submitted successfully!');  // Success message
         }
-        formik.resetForm();
-        navigate('/table');
+
+        formik.resetForm();  // Reset the form
+
+        // Delay the navigation to allow the toast to appear
+        setTimeout(() => {
+          navigate('/table');  // Navigate to TablePage after toast
+        }, 2000);  // Wait for 2 seconds (you can adjust this time)
       } catch (error) {
-        toast.error('Submission failed! Please try again.');
+        toast.error('Submission failed! Please try again.');  // Error message
       }
     },
   });
