@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-do
 import FormPage from './FormPage';
 import TablePage from './TablePage';
 import './App.css';
+import { DataTable } from 'primereact/datatable';
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -47,6 +48,10 @@ const App = () => {
         <Route
           path="/table"
           element={<TablePage data={data} setData={setData} setEditData={setEditData} />}
+        />
+         <Route
+          path="/datatable"
+          element={<DataTable/>}
         />
       </Routes>
     </Router>
