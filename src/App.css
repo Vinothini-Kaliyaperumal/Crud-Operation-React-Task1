@@ -1,57 +1,63 @@
-/* Simple and Neat Navbar */
+/* Navbar Styling */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #ffffff; /* Clean white background */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  background-color: #343a40; /* Dark gray for a more professional look */
+  padding: 10px 20px; /* Add padding for a more spacious layout */
+}
+
+.navbar-brand {
+  font-size: 28px;
+  font-weight: bold;
+  color: #f8f9fa !important; /* White color for the brand */
+  transition: color 0.3s ease;
+}
+
+.navbar-brand:hover {
+  color: #ffc107 !important; /* Yellow color on hover for the brand */
+}
+
+.navbar-toggler-icon {
+  background-color: #f8f9fa; /* White icon color for toggle */
+}
+
+.navbar-nav .nav-item .nav-link {
+  color: #f8f9fa; /* White color for nav links */
+  font-size: 16px;
+  font-weight: 500; /* Slightly bold text */
+  padding: 12px 18px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+  /* background-color: #ecc54e; Blue background on hover */
+  color: #ffc107 !important;
+  border-radius: 5px; /* Rounded corners for nav items */
+  /* margin-left: 10px; */
+}
+
+.navbar-nav .nav-item .nav-link.active {
+  background-color: #ffc107; /* Yellow background for active links */
+  color: #343a40 !important; /* Dark text color for active link */
+  border-radius: 5px;
+  /* margin-left: 20px; */
+}
+
+/* Container for Navbar */
+.container-fluid {
+  padding: 0 40px; /* Increase padding on left and right for a more spacious layout */
+}
+
+/* Adjusting for mobile responsiveness */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 10px 15px;
   }
-  
-  .navbar .brand {
-    font-size: 1.5rem;
-    font-weight: 500;
-    color: #333; /* Dark text for contrast */
-    text-decoration: none;
+
+  .navbar-brand {
+    font-size: 24px;
   }
-  
-  .navbar .brand:hover {
-    color: #007bff; /* Blue color on hover */
+
+  .navbar-nav .nav-item .nav-link {
+    font-size: 14px;
+    padding: 10px 15px;
   }
-  
-  .nav-links {
-    display: flex;
-    gap: 2rem;
-  }
-  
-  .nav-link {
-    text-decoration: none;
-    color: #333; /* Dark color for text */
-    font-size: 1.1rem;
-    font-weight: 400;
-    padding: 0.5rem;
-    transition: color 0.3s ease;
-  }
-  
-  .nav-link:hover {
-    color: #007bff; /* Blue color on hover */
-  }
-  
-  /* Active link style */
-  .nav-link.active {
-    color: #007bff;
-    font-weight: 600;
-  }
-  
-  /* Mobile responsiveness */
-  @media (max-width: 768px) {
-    .nav-links {
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-  
-    .navbar {
-      padding: 1rem;
-    }
-  }
-  
+}

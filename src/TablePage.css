@@ -113,3 +113,123 @@
     padding: 10px 0;
   }
   
+  /* Active row background */
+.status-active {
+  background-color: green;
+  color: white;
+}
+
+/* Inactive row background */
+.status-inactive {
+  background-color: red;
+  color: white;
+}
+
+/* Pending row background */
+.status-pending {
+  background-color: yellow;
+  color: black;
+}
+
+/* Default row background (fallback) */
+.status-default {
+  background-color: white;
+  color: black;
+}
+/* TablePage.css */
+
+/* Modal Footer */
+.modal-footer {
+  background-color: #f8f9fa; /* Light background for footer */
+  padding: 10px 20px;
+  display: flex;
+  justify-content: flex-end;
+  border-radius: 0 0 10px 10px; /* Rounded bottom corners */
+}
+
+/* Button Styling */
+button {
+  background-color: rgb(248, 248, 248); /* Dal color for Save button */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: black;
+  font-size: 14px;
+  margin-left: 10px; /* Space between buttons */
+}
+button.close{
+  padding: 5px 15px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #f8f7f5; /* Darker shade on hover */
+  transition: background-color 0.3s ease;
+}
+
+button.close-btn {
+  background-color: #6c757d; /* Muted gray for Close button */
+  color: white;
+}
+
+button.close-btn:hover {
+  background-color: #5a6268; /* Darker gray on hover for Close button */
+}
+
+/* Styling for custom checkboxes */
+input[type="checkbox"] {
+  display: none; /* Hide the default checkbox */
+}
+
+/* Custom checkbox design */
+input[type="checkbox"] + label {
+  position: relative;
+  padding-left: 30px; /* Space for the custom checkbox */
+  cursor: pointer;
+  font-size: 18px;
+  user-select: none;
+}
+
+input[type="checkbox"] + label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #007bff;
+  border-radius: 5px;
+  background-color: #fff;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  margin-top: -17px;
+}
+
+input[type="checkbox"]:checked + label::before {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+input[type="checkbox"]:checked + label::after {
+  content: '✔';
+  position: absolute;
+  left: 3px;
+  top: -2px;
+  font-size: 16px;
+  color: white;
+  transition: opacity 0.3s ease;
+  margin-top: -17px;
+}
+
+input[type="checkbox"]:disabled + label::before {
+  background-color: #f0f0f0;
+  border-color: #ccc;
+}
+
+input[type="checkbox"]:disabled + label::after {
+  content: '';
+}
+.all{
+  margin-top: -40px;
+}
