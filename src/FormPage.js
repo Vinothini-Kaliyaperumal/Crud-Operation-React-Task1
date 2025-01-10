@@ -1,36 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './FormPage.css';
+import { useNavigate } from 'react-router-dom';
 
 const FormPage = ({ data, setData, editData, setEditData }) => {
   const navigate = useNavigate();
 
-  const countries = {
-    India: {
-      states: ['Tamil Nadu', 'Maharashtra', 'Karnataka'],
-      cities: {
-        'Tamil Nadu': ['Chennai', 'Coimbatore'],
-        'Maharashtra': ['Mumbai', 'Pune'],
-        'Karnataka': ['Bangalore', 'Mysore'],
-      },
-    },
-    USA: {
-      states: ['California', 'Texas', 'New York'],
-      cities: {
-        'California': ['Los Angeles', 'San Francisco'],
-        'Texas': ['Houston', 'Dallas'],
-        'New York': ['New York City', 'Buffalo'],
-      },
-    },
+  // Custom Toast Function
+  const showToast = (message, callback) => {
+    toast.success(message, {
+      autoClose: 3000, // Matches progress duration
+      onClose: callback, // Navigate after toast finishes
+      className: 'toast-message',
+      progressClassName: 'toast-progress',
+    });
   };
 
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
-
+  // Formik setup
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -47,215 +35,184 @@ const FormPage = ({ data, setData, editData, setEditData }) => {
     validationSchema: Yup.object({
       name: Yup.string().required('Name is required.'),
       shortName: Yup.string().required('Short name is required.'),
-      email: Yup.string().email('Invalid email format').required('Email address is required.'),
+      email: Yup.string()
+        .email('Invalid email format')
+        .required('Email address is required.'),
       dob: Yup.date().required('Date of birth is required.'),
       address: Yup.string().required('Please provide an address.'),
-      address2: Yup.string().required('Please provide a second address.'),
+      // address2: Yup.string().required('Please provide a second address.'),
       city: Yup.string().required('Please select a city.'),
       state: Yup.string().required('Please select a state.'),
       country: Yup.string().required('Please select a country.'),
       status: Yup.string().required('Please select a status.'),
     }),
-    onSubmit: async (values) => {
-      try {
-        if (editData !== null) {
-          const updatedData = [...data];
-          updatedData[editData] = values;
-          setData(updatedData);  // Update the data array
-          setEditData(null);  // Reset edit mode
-          toast.success('Updated successfully!');  // Success message
-        } else {
-          setData([...data, values]);  // Add new entry to data
-          toast.success('Submitted successfully!');  // Success message
-        }
-
-        formik.resetForm();  // Reset the form
-
-        // Delay the navigation to allow the toast to appear
-        setTimeout(() => {
-          navigate('/table');  // Navigate to TablePage after toast
-        }, 2000);  // Wait for 2 seconds (you can adjust this time)
-      } catch (error) {
-        toast.error('Submission failed! Please try again.');  // Error message
+    onSubmit: (values) => {
+      if (editData !== null) {
+        const updatedData = [...data];
+        updatedData[editData] = values;
+        setData(updatedData);
+        setEditData(null);
+        showToast('Updated successfully!', () => navigate('/table'));
+      } else {
+        setData([...data, values]);
+        showToast('Submitted successfully!', () => navigate('/table'));
       }
+
+      formik.resetForm();
     },
   });
-
-  useEffect(() => {
-    if (editData !== null) {
-      formik.setValues(data[editData]);
-    }
-  }, [editData]);
-
-  const handleCountryChange = (e) => {
-    const selectedCountry = e.target.value;
-    formik.setFieldValue('country', selectedCountry);
-    setStates(countries[selectedCountry]?.states || []);
-    setCities([]);
-  };
-
-  const handleStateChange = (e) => {
-    const selectedState = e.target.value;
-    formik.setFieldValue('state', selectedState);
-    setCities(countries[formik.values.country]?.cities[selectedState] || []);
-  };
 
   return (
     <div className="form-container">
       <h1 className="form-heading">Form Page</h1>
-      <form onSubmit={formik.handleSubmit}>
-        <div className="input-row">
-          {['name', 'shortName'].map((field) => (
-            <div key={field} className="input-group">
-              <label className="input-label">{field.toUpperCase()}</label>
-              <input
-                type={field === 'dob' ? 'date' : 'text'}
-                name={field}
-                value={formik.values[field]}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="input-field"
-                placeholder={`Enter ${field === 'name' ? 'full name' : 'short name'}`}
-              />
-              {formik.touched[field] && formik.errors[field] && (
-                <div className="error">{formik.errors[field]}</div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className="input-row">
-          {['email', 'dob'].map((field) => (
-            <div key={field} className="input-group">
-              <label className="input-label">{field.toUpperCase()}</label>
-              <input
-                type={field === 'dob' ? 'date' : 'text'}
-                name={field}
-                value={formik.values[field]}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="input-field"
-                placeholder={`Enter ${field === 'email' ? 'email' : 'date of birth'}`}
-              />
-              {formik.touched[field] && formik.errors[field] && (
-                <div className="error">{formik.errors[field]}</div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className="input-row">
-          {['address', 'address2'].map((field) => (
-            <div key={field} className="input-group">
-              <label className="input-label">{field.toUpperCase()}</label>
-              <input
-                type="text"
-                name={field}
-                value={formik.values[field]}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="input-field"
-                placeholder={`Enter ${field === 'address' ? 'address' : 'address 2'}`}
-              />
-              {formik.touched[field] && formik.errors[field] && (
-                <div className="error">{formik.errors[field]}</div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className="dropdown-row">
-          <div className="dropdown-group">
-            <label className="input-label">COUNTRY</label>
-            <select
-              name="country"
-              value={formik.values.country}
-              onChange={handleCountryChange}
-              onBlur={formik.handleBlur}
-              className="select-input"
-            >
-              <option value="">Select Country</option>
-              {Object.keys(countries).map((country) => (
-                <option key={country} value={country}>{country}</option>
-              ))}
-            </select>
-            {formik.touched.country && formik.errors.country && (
-              <div className="error">{formik.errors.country}</div>
-            )}
-          </div>
-
-          <div className="dropdown-group">
-            <label className="input-label">STATE</label>
-            <select
-              name="state"
-              value={formik.values.state}
-              onChange={handleStateChange}
-              onBlur={formik.handleBlur}
-              className="select-input"
-            >
-              <option value="">Select State</option>
-              {states.map((state) => (
-                <option key={state} value={state}>{state}</option>
-              ))}
-            </select>
-            {formik.touched.state && formik.errors.state && (
-              <div className="error">{formik.errors.state}</div>
-            )}
-          </div>
-        </div>
-
-        <div className="dropdown-row">
-          <div className="dropdown-group">
-            <label className="input-label">CITY</label>
-            <select
-              name="city"
-              value={formik.values.city}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className="select-input"
-            >
-              <option value="">Select City</option>
-              {cities.map((city) => (
-                <option key={city} value={city}>{city}</option>
-              ))}
-            </select>
-            {formik.touched.city && formik.errors.city && (
-              <div className="error">{formik.errors.city}</div>
-            )}
-          </div>
-
-          <div className="dropdown-group">
-            <label className="input-label">STATUS</label>
-            <select
-              name="status"
-              value={formik.values.status}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className="select-input"
-            >
-              <option value="">Select Status</option>
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-              <option value="Pending">Pending</option>
-            </select>
-            {formik.touched.status && formik.errors.status && (
-              <div className="error">{formik.errors.status}</div>
-            )}
-          </div>
-        </div>
-
-        <div className="button-group">
-          <button type="submit" className="submit-button">
-            {editData !== null ? 'Update' : 'Submit'}
-          </button>
-          {editData === null && (
-            <button type="reset" onClick={formik.handleReset} className="reset-button">
-              Reset
-            </button>
+      <form onSubmit={formik.handleSubmit} className="form">
+        <div className="form-group">
+          <label>Name</label>
+          <input
+            type="text"
+            name="name"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.name}
+          />
+          {formik.touched.name && formik.errors.name && (
+            <p className="error-text">{formik.errors.name}</p>
           )}
         </div>
-      </form>
 
+        <div className="form-group">
+          <label>Short Name</label>
+          <input
+            type="text"
+            name="shortName"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.shortName}
+          />
+          {formik.touched.shortName && formik.errors.shortName && (
+            <p className="error-text">{formik.errors.shortName}</p>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
+          />
+          {formik.touched.email && formik.errors.email && (
+            <p className="error-text">{formik.errors.email}</p>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label>Date of Birth</label>
+          <input
+            type="date"
+            name="dob"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.dob}
+          />
+          {formik.touched.dob && formik.errors.dob && (
+            <p className="error-text">{formik.errors.dob}</p>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label>Address</label>
+          <input
+            type="text"
+            name="address"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.address}
+          />
+          {formik.touched.address && formik.errors.address && (
+            <p className="error-text">{formik.errors.address}</p>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label>Address 2</label>
+          <input
+            type="text"
+            name="address2"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.address2}
+          />
+          {formik.touched.address2 && formik.errors.address2 && (
+            <p className="error-text">{formik.errors.address2}</p>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label>City</label>
+          <input
+            type="text"
+            name="city"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.city}
+          />
+          {formik.touched.city && formik.errors.city && (
+            <p className="error-text">{formik.errors.city}</p>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label>State</label>
+          <input
+            type="text"
+            name="state"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.state}
+          />
+          {formik.touched.state && formik.errors.state && (
+            <p className="error-text">{formik.errors.state}</p>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label>Country</label>
+          <input
+            type="text"
+            name="country"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.country}
+          />
+          {formik.touched.country && formik.errors.country && (
+            <p className="error-text">{formik.errors.country}</p>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label>Status</label>
+          <select
+            name="status"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.status}
+          >
+            <option value="">Select status</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+          {formik.touched.status && formik.errors.status && (
+            <p className="error-text">{formik.errors.status}</p>
+          )}
+        </div>
+
+        <button type="submit">
+          {editData !== null ? 'Update' : 'Submit'}
+        </button>
+      </form>
       <ToastContainer />
     </div>
   );

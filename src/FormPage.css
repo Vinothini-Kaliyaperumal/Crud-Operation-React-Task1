@@ -117,4 +117,11 @@
   .reset-button:hover {
     background-color: #eea0ab;
   }
+  .toast-progress {
+    background-color: green;
+  }
+  
+  .toast-message {
+    border: 1px solid green;
+  }
   
